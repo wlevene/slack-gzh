@@ -7,6 +7,8 @@ use openai_flows::{
 use slack_flows::{listen_to_channel, send_message_to_channel, SlackMessage};
 use std::env;
 
+mod prompt;
+
 #[no_mangle]
 #[tokio::main(flavor = "current_thread")]
 pub async fn run() {
@@ -32,7 +34,7 @@ async fn handler(sm: SlackMessage, workspace: &str, channel: &str) {
     let co = ChatOptions {
         model: ChatModel::GPT35Turbo,
         restart: false,
-        system_prompt: None,
+        system_prompt: Some(prompt::SYSTEM_PROMPT),
     };
     log::debug!("get OpenAI settings");
     let of = OpenAIFlows::new();
